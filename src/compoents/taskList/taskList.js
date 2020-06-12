@@ -5,21 +5,18 @@ import { fetchTasks } from '../../store/actions'
 
 import classes from './tasksList.module.css'
 const TaskList = props => {
-    // const [tasks, setTasks] = useState(props.tasks)
     const { getTasks } = props
     useEffect(() => {
         getTasks()
-        // setTasks(props.tasks)
     }, [getTasks])
 
-    // console.log('props.tasks', tasks)
     let tasksItems = 'loading...'
 
     console.log('tasks before', Object.values(props.tasks))
     if (!props.loading)
         tasksItems = Object.values(props.tasks).map((task, i) => {
             console.log('looping', task)
-            return <li key ={i}>
+            return <li key={i}>
                 <Task task={task} />
             </li>
         })

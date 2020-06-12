@@ -1,5 +1,6 @@
 export {
     fetchTasks,
     AddTask,
-    deleteTask
+    deleteTask,
+    updateTaskStatus
 } from './action'

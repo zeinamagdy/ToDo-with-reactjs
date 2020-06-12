@@ -20,9 +20,16 @@ export const addTaskSuccess = (id, task) => {
         task: task
     }
 }
-export const deleteTaskSuccess = (id, task) => {
+export const deleteTaskScuccess = (id, task) => {
     return {
         type: actions.DELETE_TASK,
+        taskId: id,
+        task: task
+    }
+}
+export const updateTaskStatusScuccess = (id, task) => {
+    return {
+        type: actions.UPDATE_TASK_STATUS,
         taskId: id,
         task: task
     }
@@ -53,7 +60,7 @@ export const deleteTask = (id, task) => {
     return dispatch => {
         axios.delete('/tasks/' + id + '.json')
             .then(response => {
-                dispatch(deleteTaskSuccess(id, task))
+                dispatch(deleteTaskScuccess(id, task))
             }).catch((error => {
                 console.log('error', error)
             }))
@@ -65,6 +72,7 @@ export const updateTaskStatus = (id, task) => {
         axios.put('/tasks/' + id + '.json', task)
             .then(response => {
                 console.log(response)
+                dispatch(updateTaskStatusScuccess(id, task))
             })
     }
 

@@ -1,24 +1,39 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import classes from './tasks.module.css'
-import { deleteTask } from '../../store/actions'
+import { deleteTask, updateTaskStatus } from '../../store/actions'
 
 const Task = props => {
+    const getTaskId = (task) => {
+        return Object.keys(props.tasks).find(k => props.tasks[k] === task)
+    }
     const deleteTaskHandler = (task) => {
-        console.log('del', task)
-        const id = Object.keys(props.tasks).find(k => props.tasks[k] === task)
-        console.log('id', id)
+        const id = getTaskId(task)
         props.removeTask(id, task)
+
+    }
+    const changeStatus = (task) => {
+        const id = getTaskId(task)
+        const newTask = { ...task, status: 'done' }
+        props.updateTaskStaus(id, newTask)
 
     }
     return (
         <div style={{ marginBottom: '1rem' }}>
             <div className={classes.card}>
-                <h2>{props.task.title}</h2>
-                <p><span>{props.task.status}</span>{props.task.description}</p>
+                <span>{props.task.title}</span>
                 <span>
-                    <button onClick={() => deleteTaskHandler(props.task)}>delete</button>
-                    <button onClick={props.onDone}>done</button>
+                    <span
+                        className="material-icons icon"
+                        onClick={() => deleteTaskHandler(props.task)}>
+                        delete
+                    </span>
+                    {props.task.status !== 'done' ?
+                        <span
+                            className="material-icons icon"
+                            onClick={() => changeStatus(props.task)}>
+                            done
+                    </span> : null}
                 </span>
             </div>
         </div>
@@ -32,7 +47,8 @@ const stateMapToProps = state => {
 }
 const dispatchMapToProps = dispatch => {
     return {
-        removeTask: (id, task) => dispatch(deleteTask(id, task))
+        removeTask: (id, task) => dispatch(deleteTask(id, task)),
+        updateTaskStaus: (id, task) => dispatch(updateTaskStatus(id, task))
     }
 
 }
