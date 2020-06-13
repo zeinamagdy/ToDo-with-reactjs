@@ -21,7 +21,10 @@ const Task = props => {
     return (
         <div style={{ marginBottom: '1rem' }}>
             <div className={classes.card}>
-                <span>{props.task.title}</span>
+                {props.task.status === 'done' ?
+                    <span><del>{props.task.title}</del></span>
+                    :
+                    <span>{props.task.title}</span>}
                 <span>
                     <span
                         className="material-icons icon"

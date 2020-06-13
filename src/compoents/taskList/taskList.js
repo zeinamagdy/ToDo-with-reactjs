@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, Fragment } from 'react'
 import { connect } from 'react-redux'
 import Task from '../task/task'
 import { fetchTasks } from '../../store/actions'
@@ -11,20 +11,44 @@ const TaskList = props => {
     }, [getTasks])
 
     let tasksItems = 'loading...'
+    let doneTasks = 'loading...'
+    const getTasksList = (type) => {
+        if (type === 'todo')
+            return Object.values(props.tasks).filter(task =>
+                task.status === 'new'
+            ).map((task, i) => {
+                return <li key={i}>
+                    <Task task={task} />
+                </li>
+            })
+        else if (type === 'done')
+            return Object.values(props.tasks).filter(task =>
+                task.status === 'done'
+            ).map((task, i) => {
+                return <li key={i}>
+                    <Task task={task} />
+                </li>
+            })
+    }
 
-    console.log('tasks before', Object.values(props.tasks))
-    if (!props.loading)
-        tasksItems = Object.values(props.tasks).map((task, i) => {
-            console.log('looping', task)
-            return <li key={i}>
-                <Task task={task} />
-            </li>
-        })
-    console.log('items', tasksItems)
+
+    if (!props.loading && props.tasks) {
+        tasksItems = getTasksList('todo')
+        doneTasks = getTasksList('done')
+    }
+
+
     return (
-        <ul className={classes.taskList}>
-            {tasksItems}
-        </ul>)
+        <Fragment>
+            <h1>Todo tasks</h1>
+            <ul className={classes.taskList}>
+                {tasksItems}
+            </ul>
+            <h1>Done</h1>
+            <ul className={classes.taskList}>
+                {doneTasks}
+            </ul>
+        </Fragment>)
 
 }
 const stateMapToProps = state => {
