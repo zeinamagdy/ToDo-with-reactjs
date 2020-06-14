@@ -1,7 +1,9 @@
 import React, { useEffect, Fragment } from 'react'
 import { connect } from 'react-redux'
 import Task from '../task/task'
+import Spinner from '../UI/spinner/spinner'
 import { fetchTasks } from '../../store/actions'
+
 
 import classes from './tasksList.module.css'
 const TaskList = props => {
@@ -10,8 +12,8 @@ const TaskList = props => {
         getTasks()
     }, [getTasks])
 
-    let tasksItems = 'loading...'
-    let doneTasks = 'loading...'
+    let tasksItems = <Spinner />
+    let doneTasks = <Spinner />
     const getTasksList = (type) => {
         if (type === 'todo')
             return Object.values(props.tasks).filter(task =>
@@ -31,8 +33,9 @@ const TaskList = props => {
             })
     }
 
-
+    console.log('spinner', props.tasks)
     if (!props.loading && props.tasks) {
+        console.log('loading', props.loading)
         tasksItems = getTasksList('todo')
         doneTasks = getTasksList('done')
     }
@@ -40,17 +43,26 @@ const TaskList = props => {
 
     return (
         <Fragment>
-            <h1>Todo tasks</h1>
-            <ul className={classes.taskList}>
-                {tasksItems}
-            </ul>
-            <h1>Done</h1>
-            <ul className={classes.taskList}>
-                {doneTasks}
-            </ul>
+            {!props.loading ?
+                <div>
+                    <h1>Todo tasks</h1>
+                    <ul className={classes.taskList}>
+                        {tasksItems}
+                    </ul>
+                    <h1>Done</h1>
+                    <ul className={classes.taskList}>
+                        {doneTasks}
+                    </ul>
+                </div>
+                :
+                <Spinner />
+            }
         </Fragment>)
 
+
 }
+
+
 const stateMapToProps = state => {
     return {
         tasks: state.tasksReducer.tasks,

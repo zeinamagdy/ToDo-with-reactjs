@@ -2,7 +2,7 @@ import * as actions from '../actions/actionTypes'
 
 const intialState = {
     tasks: {},
-    loading: false
+    loading: true
 }
 
 const tasksReducer = (state = intialState, action) => {
